@@ -53,32 +53,62 @@ class Resource
      */
     public function get($data = null)
     {
-        $uri = $this->getUri();
-
+        //$uri = $this->getUri();
+        $uri = 'https://api.allegro.pl/sale/categories';
         if ($data !== null) {
             $uri .= '?';
             $uri .= http_build_query($data);
         }
-
         return $this->sendApiRequest($uri, 'GET');
     }
 
     /**
-     * @param array $data
+     * @param $categoryId
      * @return bool|string
      */
-    public function put($data)
-    {
-        return $this->sendApiRequest($this->getUri(), 'PUT', $data);
+    public function getAttributeByCategory($categoryId){
+        $uri = 'https://api.allegro.pl/sale/categories';
+        if(!empty($categoryId)){
+            $uri.= '/'.$categoryId.'/parameters';
+        }
+        return $this->sendApiRequest($uri, 'GET');
     }
-
+    public function getDeliveryMethod($uri){
+        return $this->sendApiRequest($uri, 'GET');
+    }
+    /**
+     * @param null $data
+     * @return bool|string
+     */
+    public function getOrders($data = null){
+        $uri = 'https://api.allegro.pl/order';
+        if ($data !== null) {
+            $uri .= '/'.$data;
+        }
+        return $this->sendRequest($uri, 'GET');
+    }
     /**
      * @param array $data
      * @return bool|string
      */
-    public function post($data)
+    public function put($data,$uri)
     {
-        return $this->sendApiRequest($this->getUri(), 'POST', $data);
+        return $this->sendApiRequest($uri, 'PUT', $data);
+    }
+
+    /**
+     * @param $data
+     * @param $url
+     * @return bool|string
+     */
+    public function post($data,$uri)
+    {
+        if($uri == 'https://api.allegro.pl/sale/product-proposals'){
+            return $this->sendRequest($uri, 'POST', $data);
+        } else {
+            return $this->sendApiRequest($uri, 'POST', $data);
+        }
+//        return $this->sendApiRequest($uri, 'POST', $data);
     }
 
     /**
@@ -109,6 +139,20 @@ class Resource
         return new Resource($id, $collection);
     }
 
+    protected function sendRequest($url, $method, $data = array())
+    {
+        $token = $this->getAccessToken();
+        $key = $this->getApiKey();
+
+        $headers = array(
+            "Authorization: Bearer $token",
+            "Api-Key: $key",
+            "Content-Type: application/vnd.allegro.beta.v1+json",
+            "Accept: application/vnd.allegro.beta.v1+json"
+        );
+        $data = json_encode($data);
+        return $this->sendHttpRequest($url, $method, $headers, $data);
+    }
     /**
      * @param string $url
      * @param string $method
@@ -126,9 +170,7 @@ class Resource
             "Content-Type: application/vnd.allegro.public.v1+json",
             "Accept: application/vnd.allegro.public.v1+json"
         );
-
         $data = json_encode($data);
-
         return $this->sendHttpRequest($url, $method, $headers, $data);
     }
 
@@ -149,9 +191,7 @@ class Resource
                 'ignore_errors' => true
             )
         );
-
         $context = stream_context_create($options);
-
         return file_get_contents($url, false, $context);
     }
 
