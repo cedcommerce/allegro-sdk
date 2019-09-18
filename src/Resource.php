@@ -110,20 +110,10 @@ class Resource
         }
 //        return $this->sendApiRequest($uri, 'POST', $data);
     }
-
-    /**
-     * @param null|array $data
-     * @return bool|string
-     */
+    
     public function delete($data = null)
     {
-        $uri = $this->getUri();
-
-        if ($data !== null) {
-            $uri .= '?';
-            $uri .= http_build_query($data);
-        }
-
+        $uri = 'https://api.allegro.pl/sale/offers/'.$data;
         return $this->sendApiRequest($uri, 'DELETE');
     }
 
