@@ -62,6 +62,10 @@ class Resource
         return $this->sendApiRequest($uri, 'GET');
     }
 
+    public function getAllegroProduct($data){
+        return $this->sendApiRequest($data, 'GET');
+    }
+
     /**
      * @param $categoryId
      * @return bool|string
@@ -110,7 +114,11 @@ class Resource
         }
 //        return $this->sendApiRequest($uri, 'POST', $data);
     }
-    
+
+    /**
+     * @param null|array $data
+     * @return bool|string
+     */
     public function delete($data = null)
     {
         $uri = 'https://api.allegro.pl/sale/offers/'.$data;
