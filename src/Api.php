@@ -108,13 +108,13 @@ class Api extends Resource
     {
         $authorization = base64_encode($this->clientId . ':' . $this->clientSecret);
 
+
         $headers = array(
             "Authorization: Basic $authorization",
             "Content-Type: application/x-www-form-urlencoded"
         );
 
         $data = http_build_query($data);
-
         $response = $this->sendHttpRequest(static::TOKEN_URI, 'POST', $headers, $data);
 
         $data = json_decode($response);
