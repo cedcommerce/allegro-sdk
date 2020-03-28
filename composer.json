@@ -1,26 +1,52 @@
 {
+2
     "name": "cedcommerce/allegro-sdk",
+3
     "description": "simple interface for Allegro REST API",
+4
     "license": "MIT",
+5
     "authors": [
+6
         {
+7
             "name": "Piotr Jakubik",
+8
             "email": "wiatrogon@gmail.com"
+9
         }
+10
     ],
+11
     "keywords" : [
+12
         "allegro",
+13
         "rest"
+14
     ],
+15
     "require": {
+16
         "php": ">=5.3"
+17
     },
+18
     "autoload": {
+19
         "psr-4": {
+20
             "Allegro\\REST\\": "src"
+21
         }
+22
     },
+23
     "require-dev": {
+24
         "phpunit/phpunit": "^5.7"
+25
     }
+26
 }
+27
